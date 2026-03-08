@@ -1,0 +1,25 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  redeploy_everything:
+    name: Deploying everything to the staging cluster
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH Into the server and deploy
+        run: |
+          echo "${{ secrets.SSH_SECRET_KEY }}" > ssh_key
+          chmod 600 ssh_key
+
+          ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@3.25.162.222 << 'EOF'
+            cd learn-devops
+            git pull
+            pnpm install
+            pnpm run build
+            pm2 restart all
+          EOF
