@@ -17,6 +17,9 @@ jobs:
           chmod 600 ssh_key
 
           ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@3.25.162.222 << 'EOF'
+            xport NVM_DIR="$HOME/.nvm"
+            source "$NVM_DIR/nvm.sh"
+            
             cd learn-devops
             git pull
             pnpm install
